@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- YouTube Ошибка 153 (Referrer Policy) қатесін жоюға арналған мета-тег -->
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>AQJAIYQ GEO-BRANDING | Батыс Қазақстан туризмі және цифрлық визит-картасы</title>
+  
+  <!-- Fonts: Montserrat as Default, Playfair Display ONLY for Brand Title -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS for Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <style>
+    :root {
+      --primary: #0a4d68;
+      --primary-light: #088395;
+      --accent-gold: #d4af37;
+      --accent-gold-hover: #b89628;
+      --accent-red: #b33939;
+      --bg-light: #f4f8fa;
+      --text-dark: #1e272c;
+      --text-muted: #5e6d75;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 30px rgba(10, 77, 104, 0.08);
+      --shadow-hover: 0 18px 40px rgba(10, 77, 104, 0.16);
+      --border-radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif !important;
+    }
+
+    .brand-title-font {
+      font-family: 'Playfair Display', serif !important;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 25px;
+    }
+
+    .logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text span {
+      color: var(--accent-gold);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 18px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      color: var(--primary-light);
+    }
+
+    .btn-header {
+      background: var(--primary);
+      color: #fff !important;
+      padding: 9px 20px;
+      border-radius: 30px;
+      transition: all 0.3s;
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .btn-header:hover {
+      background: var(--accent-gold);
+      color: #000 !important;
+      transform: translateY(-2px);
+    }
+
+    .mobile-burger {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+      color: var(--primary);
+    }
+
+    .hero {
+      position: relative;
+      background: linear-gradient(-45deg, #0a4d68, #088395, #056676, #114e60);
+      background-size: 400% 400%;
+      animation: animatedGradient 12s ease infinite;
+      color: #fff;
+      padding: 110px 20px 130px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @keyframes animatedGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 10%, transparent 20%);
+      background-size: 30px 30px;
+      animation: rotatePattern 60s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotatePattern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 950px;
+      margin: 0 auto;
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-gold);
+      color: #000;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 18px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      line-height: 1.25;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 35px;
+      opacity: 0.95;
+      font-weight: 400;
+      max-width: 820px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-btns {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 30px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .btn-gold {
+      background: var(--accent-gold);
+      color: #1a1a1a;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-gold:hover {
+      background: #e5c358;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-outline {
+      border: 2px solid #fff;
+      color: #fff;
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .stats-bar {
+      max-width: 1150px;
+      margin: -50px auto 60px;
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 30px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      box-shadow: var(--shadow-hover);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .stat-item {
+      padding: 10px;
+      border-right: 1px solid #edf2f7;
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-item h3 {
+      font-size: 36px;
+      color: var(--primary);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .stat-item p {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 1250px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-title span {
+      color: var(--primary-light);
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 2px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .section-title h2 {
+      font-size: 34px;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .map-wrapper {
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 25px;
+      box-shadow: var(--shadow);
+      margin-bottom: 60px;
+    }
+
+    .map-info-box {
+      background: #eef7fa;
+      border-left: 5px solid var(--primary-light);
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--text-dark);
+    }
+
+    .map-info-box strong {
+      color: var(--primary);
+    }
+
+    #interactiveMap {
+      width: 100%;
+      height: 480px;
+      border-radius: 12px;
+      z-index: 1;
+    }
+
+    .grid-districts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .card-district {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      border-top: 5px solid var(--primary-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-district:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-body {
+      padding: 22px;
+    }
+
+    .card-tag {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--primary-light);
+      margin-bottom: 8px;
+      display: inline-block;
+      background: #eef7fa;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .card-body h3 {
+      font-size: 20px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .card-body .slogan {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--accent-red);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .card-body p {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .card-footer-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #edf2f7;
+      padding-top: 14px;
+      margin-top: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .btn-audio {
+      background: #f0f4f8;
+      border: none;
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-audio:hover {
+      background: var(--accent-gold);
+      color: #000;
+    }
+
+    .constructor-box {
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 35px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 35px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e1e8ed;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+      background: #fff;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--primary-light);
+    }
+
+    .calc-results {
+      background: linear-gradient(135deg, #f0f7f9, #e8f4f8);
+      border-radius: 14px;
+      padding: 28px;
+      border-left: 6px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .calc-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .calc-item strong {
+      color: var(--primary);
+      font-size: 15px;
+    }
+
+    .calc-total {
+      border-top: 2px dashed #b0d4de;
+      padding-top: 15px;
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent-red);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .quiz-card {
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 35px;
+      box-shadow: var(--shadow);
+      margin-top: 30px;
+    }
+
+    .quiz-question {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .quiz-btn {
+      background: var(--bg-light);
+      border: 2px solid #e1e8ed;
+      padding: 12px 18px;
+      border-radius: 10px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-btn:hover {
+      border-color: var(--primary-light);
+      background: #eef7fa;
+    }
+
+    .quiz-btn.correct {
+      background: #27ae60 !important;
+      color: #fff !important;
+      border-color: #27ae60 !important;
+    }
+
+    .quiz-btn.wrong {
+      background: #e74c3c !important;
+      color: #fff !important;
+      border-color: #e74c3c !important;
+    }
+
+    .quiz-score {
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .geobox-box {
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 35px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .geobox-item {
+      background: #fafafa;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #edf2f7;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .geobox-item span.emoji {
+      font-size: 32px;
+    }
+
+    .geobox-item h5 {
+      font-size: 15px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .geobox-item p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .method-card {
+      background: #fff;
+      padding: 28px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform 0.3s;
+      border-bottom: 4px solid var(--accent-gold);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .method-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .method-card .icon {
+      font-size: 40px;
+      margin-bottom: 14px;
+    }
+
+    .method-card h4 {
+      font-size: 17px;
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .method-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .btn-download {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 20px;
+      background: var(--primary-light);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-download:hover {
+      background: var(--primary);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: var(--border-radius);
+      max-width: 750px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .close-modal:hover { color: #000; }
+
+    footer {
+      background: var(--primary);
+      color: #fff;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .constructor-box, .geobox-box { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: 1fr 1fr; gap: 20px; }
+      nav ul { display: none; }
+      nav ul.active { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #fff; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+      .mobile-burger { display: block; }
+      .hero h1 { font-size: 32px; }
+      .quiz-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <span class="logo-text brand-title-font">AQJAIYQ <span>GEO-BRANDING</span></span>
+      </a>
+      
+      <button class="mobile-burger" onclick="toggleMenu()" aria-label="Мәзірді ашу">☰</button>
+
+      <nav>
+        <ul id="navMenu">
+          <li><a href="#about">Басты бет</a></li>
+          <li><a href="#video-section">ЖИ Видео</a></li>
+          <li><a href="#map-section">Гугл Карта</a></li>
+          <li><a href="#districts">12 Аудан Бренді</a></li>
+          <li><a href="#constructor">Тур-Конструктор</a></li>
+          <li><a href="#quiz">Geo-Quiz</a></li>
+          <li><a href="#geobox">Geo-Box</a></li>
+          <li><a href="#methodology">Қазыларға & Әдістеме</a></li>
+        </ul>
+      </nav>
+
+      <a href="#constructor" class="btn-header">Маршрут есептеу</a>
+    </div>
+  </header>
+
+  <div class="hero" id="about">
+    <div class="hero-content">
+      <div class="badge">«ҮЗДІК АВТОРЛЫҚ БАҒДАРЛАМА — 2026» КОНКУРСЫНА</div>
+      <h1 class="brand-title-font">AQJAIYQ GEO-BRANDING</h1>
+      <p>Батыс Қазақстан облысының 12 ауданын толық қамтитын цифрлық туристік визит-карта, интерактивті ГАЖ-карта, тур-конструктор және авторлық Geo-Box жинағы</p>
+      <div class="hero-btns">
+        <a href="#video-section" class="btn btn-gold">🎬 ЖИ Видеонұсқаны Қарау</a>
+        <a href="#map-section" class="btn btn-outline">🗺️ Интерактивті Карта</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <h3>12</h3>
+      <p>Аудан + Орал қаласы</p>
+    </div>
+    <div class="stat-item">
+      <h3>34</h3>
+      <p>Сағаттық авторлық курс</p>
+    </div>
+    <div class="stat-item">
+      <h3>13</h3>
+      <p>Туристік локация</p>
+    </div>
+    <div class="stat-item">
+      <h3>100%</h3>
+      <p>Smart ГАЖ-навигация</p>
+    </div>
+  </div>
+
+  <!-- 🎬 ЖИ-ВИДЕО ТҰСАУКЕСЕР СЕКЦИЯСЫ (Гугл Картаның дәл үстінде) -->
+  <section id="video-section" style="padding-bottom: 20px;">
+    <div class="section-title">
+      <span>ЖИ-Видеотұсаукесер (1 минут)</span>
+      <h2>AQJAIYQ GEO-BRANDING — Бейне Шолу</h2>
+    </div>
+
+    <div style="background: #fff; border-radius: var(--border-radius); padding: 25px; box-shadow: var(--shadow); max-width: 1000px; margin: 0 auto 30px;">
+      <div style="background: #eef7fa; border-left: 5px solid var(--primary-light); padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: var(--text-dark);">
+        <strong>💡 ЖИ-Видеотұсаукесер:</strong> Төменде <code>video.mp4</code> бейнефайлы ойнатылады. Файлды осы сайт файлы тұрған папкаға <code>video.mp4</code> деген атаумен қойсаңыз, ол автоматты түрде шығады.
+      </div>
+
+      <!-- 16:9 Адаптивті HTML5 Бейне Плейер (компьютердегі video.mp4 үшін) -->
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+        <video 
+          id="localVideoPlayer"
+          controls 
+          preload="metadata"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+          <source src="video/1011_compressed.mp4" type="video/mp4">
+          Сіздің браузеріңіз HTML5 видеоны қолдамайды.
+        </video>
+      </div>
+
+      <!-- Компьютерден файл таңдау мүмкіндігі -->
+      <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+        <div style="flex: 1; min-width: 260px;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 6px;">Компьютерден видео файлды таңдап ойнату:</label>
+          <input type="file" id="localVideoInput" accept="video/mp4,video/*" onchange="loadLocalVideo(event)" style="padding: 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%;">
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; background: #f0f4f8; padding: 10px 15px; border-radius: 8px;">
+          Әдепкі файл: <code>video.mp4</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map-section">
+    <div class="section-title">
+      <span>Цифрлық ГАЖ-Геолокация</span>
+      <h2>Гугл Карта және БҚО Интерактивті Навигациясы</h2>
+    </div>
+
+    <div class="map-wrapper">
+      <div class="map-info-box">
+        <strong>💡 Бұл карта не үшін керек?</strong> Google Maps / Интерактивті карта арқылы оқушылар мен туристер БҚО-ның барлық 12 ауданындағы негізгі туристік нысандардың дәл геолокациясын, Орал қаласынан қашықтығын қарап, GPS бағытын белгілей алады. Маркерді басып, әр локацияның сипаттамасын ашыңыз!
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <button id="btnMapViewInteractive" class="btn-audio" style="background: var(--primary); color: #fff; padding: 8px 16px;" onclick="switchMapMode('leaflet')">🗺️ Интерактивті Топо-Карта</button>
+        <button id="btnMapViewGoogle" class="btn-audio" style="background: #e1e8ed; color: var(--text-dark); padding: 8px 16px;" onclick="switchMapMode('google')">🛰️ Google Maps Спутник / Эко-режим</button>
+      </div>
+
+      <div id="interactiveMapContainer">
+        <div id="interactiveMap"></div>
+        <iframe id="googleMapIframe" src="https://maps.google.com/maps?q=Uralsk+West+Kazakhstan&t=&z=7&ie=UTF8&iwloc=&output=embed" style="width:100%; height:480px; border:none; border-radius:12px; display:none;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section id="districts">
+    <div class="section-title">
+      <span>Өңірлік брендинг каталогы</span>
+      <h2>12 Аудан және Орал Қаласы Брендтері</h2>
+    </div>
+
+    <div class="grid-districts">
+      <!-- 1. Қазталов -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Қазталов ауданы</span>
+          <h3>Жалпақтал ауылы</h3>
+          <div class="slogan">«Қазақстанның Парижі — Ынтымақ мұнарасы»</div>
+          <p>Мектеп түлектері сыйға тартқан 30 метрлік мұнара — өңірдегі жастардың, фототуризм мен романтикалық саяхаттың жаңа нүктесі.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 320 км</span>
+            <button class="btn-audio" onclick="playAudio('Қазталов ауданы. Жалпақтал Ынтымақ мұнарасы - 30 метрлік жаңа этно-архитектуралық нысан.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Теректі -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Теректі ауданы</span>
+          <h3>Шалқар көлі</h3>
+          <div class="slogan">«Даланың тұзды інжу-маржаны»</div>
+          <p>Минералды суы мен тұзы адам ағзасын сауықтыратын табиғи көл. Жағажай және шипажай туризмінің орталығы.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 110 км</span>
+            <button class="btn-audio" onclick="playAudio('Теректі ауданы. Шалқар көлі - емдік минералды суы мен балық қорына бай табиғи көл.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Бөкей ордасы -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Бөкей ордасы ауданы</span>
+          <h3>Хан ордасы кешені</h3>
+          <div class="slogan">«Тұңғыштар мекені — Хан тоғайы»</div>
+          <p>Тұңғыш мектеп, баспахана, дәріхана және Жәңгір хан сарайы. Нарын құмдарымен үйлескен тарихи қорық-музей.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 550 км</span>
+            <button class="btn-audio" onclick="playAudio('Бөкей ордасы. Хан ордасы тарихи кешені - қазақтың алғашқы ағартушылық орталығы.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Орал қаласы -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Батыс Қазақстан орталығы</span>
+          <h3>Орал қаласы</h3>
+          <div class="slogan">«Еуропа мен Азия тоғысқан қақпа»</div>
+          <p>XIX ғасырлық көпестер үйлері, «Қызыл мешіт», Шаған-Жайық жағалауы және екі құрлықты бөліп тұрған стела.</p>
+
+          <div class="card-footer-info">
+            <span>Орталық нүкте</span>
+            <button class="btn-audio" onclick="playAudio('Орал қаласы - Еуропа мен Азия шекарасында орналасқан көне тарихи қала.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Ақжайық -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Ақжайық ауданы</span>
+          <h3>Чапаев & Жайық бойы</h3>
+          <div class="slogan">«Өр өзеннің ерлік дастаны»</div>
+          <p>Жайық өзенінің көрікті иіндері, Чапаев музей-кешені және балық аулау мен су қайықтары саяхаты.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 130 км</span>
+            <button class="btn-audio" onclick="playAudio('Ақжайық ауданы. Чапаев мекені - су туризмі мен тарихи музей кешені.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Жаңақала -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Жаңақала ауданы</span>
+          <h3>Күйшілер өлкесі</h3>
+          <div class="slogan">«Құрманғазы мен Динаның киелі күйі»</div>
+          <p>Қамысты-Самар көлдер жүйесі және қазақтың күй өнерінің ұлы тұлғалары шыққан рухани-мәдени мекен.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 250 км</span>
+            <button class="btn-audio" onclick="playAudio('Жаңақала ауданы - ұлы күйшілер өлкесі мен Самар көлдер кешені.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Бөрлі -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Бөрлі ауданы</span>
+          <h3>Ақсай индустриалды кластері</h3>
+          <div class="slogan">«Эко-технология & Энергетика тоғысы»</div>
+          <p>Қарашығанақ кен орны, Ақсай қаласының заманауи эко-парктері мен индустриалды туризм бағыты.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 140 км</span>
+            <button class="btn-audio" onclick="playAudio('Бөрлі ауданы Ақсай қаласы - БҚО-ның индустриалды және экономикалық орталығы.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Шыңғырлау -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Шыңғырлау ауданы</span>
+          <h3>Шыңғырлау сарқырамасы</h3>
+          <div class="slogan">«Әлемдегі ең кішкентай табиғи сарқырама»</div>
+          <p>Елек өзені алабындағы мөлдір табиғи бұлақтар мен кішігірім табиғи сарқырама гидро-экокомплексі.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 220 км</span>
+            <button class="btn-audio" onclick="playAudio('Шыңғырлау ауданы - табиғи бұлақтар мен кіші сарқырамасы бар эко-аймақ.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Сырым -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Сырым ауданы</span>
+          <h3>Жымпиты — Алашорда ордасы</h3>
+          <div class="slogan">«Батыс Алашорданың тарихи астанасы»</div>
+          <p>Сырым Датұлы музейі, Жанша Досмұхамедов бастаған Батыс Алашорда үкіметі орналасқан тарихи ғимараттар.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 140 км</span>
+            <button class="btn-audio" onclick="playAudio('Сырым ауданы Жымпиты - Батыс Алашорданың тарихи орталығы.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Тасқала -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Тасқала ауданы</span>
+          <h3>Ешкітау табиғи жоталары</h3>
+          <div class="slogan">«Орал тауларының батыс сілемдері»</div>
+          <p>Биік жоталар, геологиялық шөгінді қатпарлар, треккинг пен гео-туризмге арналған ландшафттық аймақ.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 90 км</span>
+            <button class="btn-audio" onclick="playAudio('Тасқала ауданы - Ешкітау табиғи жоталары мен гео-туризм орталығы.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Бәйтерек -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Бәйтерек ауданы</span>
+          <h3>Самал & Жасыл Агротуризм</h3>
+          <div class="slogan">«Облыстың жасыл бау-бақша орталығы»</div>
+          <p>Шаған өзені бойындағы сауықтыру лагерьлері, Мичурин бау-бақшалары және агротуристік демалыс орындары.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 20 км</span>
+            <button class="btn-audio" onclick="playAudio('Бәйтерек ауданы - агротуризм мен жасыл бау-бақша аймағы.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Қаратөбе -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Қаратөбе ауданы</span>
+          <h3>Мұхит Мерәліұлы өлкесі</h3>
+          <div class="slogan">«Арқалы әншілер мен Қаратөбе құмдары»</div>
+          <p>Халық композиторы Мұхиттың әншілік мектебі, Қалдығайты, Жездіғаты өзендері мен Қаратөбе құм шағылдары.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 260 км</span>
+            <button class="btn-audio" onclick="playAudio('Қаратөбе ауданы - Мұхит әндері өлкесі және құмды табиғи ландшафт.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. Жәнібек -->
+      <div class="card-district">
+        <div class="card-body">
+          <span class="card-tag">Жәнібек ауданы</span>
+          <h3>Батыс Шекаралық Форпост</h3>
+          <div class="slogan">«Ұлы Жеңіс пен Шекара тарихы»</div>
+          <p>БҚО-ның ең батыс шеткі нүктесі, соғыс жылдарындағы әскери-аэродром тарихы мен шекаралық этнография.</p>
+
+          <div class="card-footer-info">
+            <span>Қашықтық: 500 км</span>
+            <button class="btn-audio" onclick="playAudio('Жәнібек ауданы - Батыс Қазақстанның шекаралық тарихи бекінісі.')">🔊 Аудио</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="constructor">
+    <div class="section-title">
+      <span>Интерактивті жобалау құралы</span>
+      <h2>Smart Aqjaiyq Tour Constructor</h2>
+    </div>
+
+    <div class="constructor-box">
+      <div class="calc-form">
+        <div class="form-group">
+          <label>Бастапқы нүкте (Орал қаласынан):</label>
+          <input type="text" value="Орал қаласы (Нөлдік шақырым)" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Туристік бағытты таңдаңыз:</label>
+          <select id="routeSelect" onchange="calculateTour()">
+            <option value="jalpaktal">Орал ➔ Жалпақтал («Ынтымақ» мұнарасы)</option>
+            <option value="shalkar">Орал ➔ Теректі (Шалқар көлі шипажайы)</option>
+            <option value="bokei">Орал ➔ Бөкей ордасы (Хан ордасы кешені)</option>
+            <option value="shingirlau">Орал ➔ Шыңғырлау сарқырамасы</option>
+            <option value="tasqala">Орал ➔ Тасқала (Ешкітау жотасы)</option>
+            <option value="circle">Үлкен саяхат: БҚО Алтын шеңбері (3 күндік)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Саяхатшылар саны (адам):</label>
+          <input type="number" id="peopleCount" value="4" min="1" max="20" onchange="calculateTour()">
+        </div>
+
+        <div class="form-group">
+          <label>Көлік түрі:</label>
+          <select id="carType" onchange="calculateTour()">
+            <option value="sedan">Жеңіл көлік (Седан / 9 л / 100 км)</option>
+            <option value="miniven">Минивэн / Жолталғамайтын (14 л / 100 км)</option>
+          </select>
+        </div>
+
+        <button class="btn btn-gold" style="width: 100%; margin-top: 10px;" onclick="printItinerary()">🖨️ Маршрут пен сметаны басып шығару</button>
+      </div>
+
+      <div class="calc-results">
+        <h4 style="margin-bottom: 15px; color: var(--primary);">САПАР ЕСЕБІ МЕН СМЕТАСЫ:</h4>
+        <div class="calc-item">
+          <span>Жалпы жол қашықтығы:</span>
+          <strong id="resDistance">640 км (барып-қайту)</strong>
+        </div>
+        <div class="calc-item">
+          <span>Болжамды жол уақыты:</span>
+          <strong id="resTime">4 сағ 30 мин</strong>
+        </div>
+        <div class="calc-item">
+          <span>Жанармай шығыны:</span>
+          <strong id="resFuel">14 976 ₸</strong>
+        </div>
+        <div class="calc-item">
+          <span>Тамақтану мен жатын орын:</span>
+          <strong id="resFood">24 000 ₸</strong>
+        </div>
+        <div class="calc-total">
+          <span>1 адамға шаққанда:</span>
+          <span id="resPerPerson">9 744 ₸</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-title">
+      <span>Интерактивті оқу модулі</span>
+      <h2>Geo-Quiz: БҚО Өлкетану Викторинасы</h2>
+    </div>
+
+    <div class="quiz-card">
+      <div class="quiz-question" id="quizQuestion">Сұрақ жүктелуде...</div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px;">
+        <span class="quiz-score" id="quizScore">Ұпай: 0 / 5</span>
+        <button class="btn btn-outline" style="background: var(--primary); color: #fff;" onclick="nextQuestion()">Келесі сұрақ ➔</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="geobox">
+    <div class="section-title">
+      <span>Қолданбалы шығармашылық өнім</span>
+      <h2>«Aqjaiyq Geo-Box» Көрмесі & QR-Навигация</h2>
+    </div>
+
+    <div class="geobox-box">
+      <div>
+        <h3 style="color: var(--primary); margin-bottom: 15px; font-weight: 700;">Өлкенің табиғи үлгілері қорапшасы</h3>
+        <p style="margin-bottom: 20px; font-size: 14px; color: #555;">Оқушылар БҚО ресурстарын өз қолдарымен ұстап сезінуі үшін жасалған арнайы экспозициялық Geo-Box жинағы. Әр үлгіде ғылыми төлқұжат бар.</p>
+        
+        <div class="geobox-item">
+          <span class="emoji">🧂</span>
+          <div>
+            <h5>Шалқардың емдік тұзы</h5>
+            <p>Теректі ауданы. Минералды тұздар мен сауықтыру шипасы.</p>
+          </div>
+        </div>
+
+        <div class="geobox-item">
+          <span class="emoji">🏜️</span>
+          <div>
+            <h5>Нарынның алтын құмы</h5>
+            <p>Бөкей ордасы. Далалық экзотикалық шөл құмының үлгісі.</p>
+          </div>
+        </div>
+
+        <div class="geobox-item">
+          <span class="emoji">🗼</span>
+          <div>
+            <h5>Жалпақтал «Ынтымақ» 3D макеті</h5>
+            <p>Қазталов ауданы. 3D басып шығарылған мұнара миниатюрасы.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #eef5f8; border-radius: 16px; padding: 30px; text-align: center; border: 2px dashed var(--primary-light);">
+        <h4 style="color: var(--primary); margin-bottom: 10px; font-weight: 700;">SMART КАРТА QR-НАВИГАЦИЯСЫ</h4>
+        <p style="font-size: 13px; color: #666; margin-bottom: 18px;">Телефоныңызды жақындатып, Google Maps БҚО интерактивті геолокациялар базасын ашыңыз:</p>
+        
+        <div style="background: #fff; width: 160px; height: 160px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-shadow: var(--shadow); padding: 10px;">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://maps.google.com/?q=Uralsk+West+Kazakhstan" alt="Google Maps QR Navigation" style="width: 100%; height: 100%; border-radius: 6px;">
+        </div>
+        
+        <p style="font-size: 12px; margin-top: 15px; color: var(--primary-light); font-weight: 700;">Google My Maps Цифрлық Базасы</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="methodology">
+    <div class="section-title">
+      <span>Нормативтік-әдістемелік құжаттар</span>
+      <h2>Қазылар Алқасы мен Мұғалімдерге Құжаттар Пакеті</h2>
+    </div>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <div>
+          <div class="icon">📘</div>
+          <h4>34 сағаттық Бағдарлама</h4>
+          <p>Түсіндірме жазбасы, 4 модульдік күнтізбелік-тақырыптық жоспары (КТЖ) және мазмұны.</p>
+        </div>
+        <button class="btn-download" onclick="openDocModal('program')">Құжатты қарау</button>
+      </div>
+
+      <div class="method-card">
+        <div>
+          <div class="icon">📝</div>
+          <h4>3 Ресми Рецензия</h4>
+          <p>PhD ғалымнан, әдіскерден және практик мұғалімнен 2026 жылғы конкурстық бекітілген форма.</p>
+        </div>
+        <button class="btn-download" onclick="openDocModal('reviews')">Рецензияларды қарау</button>
+      </div>
+
+      <div class="method-card">
+        <div>
+          <div class="icon">📑</div>
+          <h4>ҚМЖ & Worksheet</h4>
+          <p>№130 бұйрыққа сай сабақ жоспарлары мен оқушының таратпа жұмыс парақтары.</p>
+        </div>
+        <button class="btn-download" onclick="openDocModal('kmj')">ҚМЖ Үлгілерін қарау</button>
+      </div>
+
+      <div class="method-card">
+        <div>
+          <div class="icon">📊</div>
+          <h4>Бағалау Рубрикаторы</h4>
+          <p>3 деңгейлі критериалды дескрипторлар, бағалау шкаласы мен мониторинг картасы.</p>
+        </div>
+        <button class="btn-download" onclick="openDocModal('rubric')">Рубрикаторды қарау</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal" id="docModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeDocModal()">&times;</span>
+      <h3 id="modalTitle" style="color: var(--primary); margin-bottom: 15px; font-weight: 800;">Құжат Атауы</h3>
+      <div id="modalBody" style="font-size: 14px; color: #444; line-height: 1.7;">
+        Құжат мазмұны жүктелуде...
+      </div>
+      <div style="margin-top: 25px; text-align: right;">
+        <button class="btn btn-gold" onclick="window.print()">🖨️ Басып шығару</button>
+        <button class="btn btn-outline" style="background: #888; color: #fff; border: none;" onclick="closeDocModal()">Жабу</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="brand-title-font" style="font-size: 18px; margin-bottom: 8px;"><strong>AQJAIYQ GEO-BRANDING</strong></p>
+    <p style="opacity: 0.85;">Батыс Қазақстан облысының «Үздік авторлық бағдарлама — 2026» конкурсына арналған авторлық веб-платформа</p>
+    <p style="margin-top: 12px; font-size: 12px; color: var(--accent-gold);">© 2026 БҚО Білім Басқармасы & Авторлық Платформа</p>
+  </footer>
+
+  <!-- Leaflet JS for Interactive Map -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    window.onload = function() {
+      initMap();
+      calculateTour();
+      loadQuizQuestion();
+    };
+
+    function updateVideoUrl() {
+      const input = document.getElementById('videoUrlInput');
+      const iframe = document.getElementById('driveVideoIframe');
+      const directLink = document.getElementById('directYoutubeLink');
+      if (!input || !iframe) return;
+
+      let url = input.value.trim();
+      if (!url) return;
+
+      let videoId = '';
+      if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
+      } else if (url.includes('youtube.com/watch')) {
+        const urlParams = new URLSearchParams(url.split('?')[1]);
+        videoId = urlParams.get('v');
+      } else if (url.includes('youtube.com/embed/')) {
+        videoId = url.split('youtube.com/embed/')[1].split('?')[0];
+      } else if (url.length === 11 && !url.includes('/')) {
+        videoId = url;
+      }
+
+      if (videoId) {
+        // Ошибка 153 алдын алу үшін youtube-nocookie.com және rel=0
+        iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&enablejsapi=1`;
+        if (directLink) {
+          directLink.href = `https://youtu.be/${videoId}`;
+        }
+      } else {
+        iframe.src = url;
+      }
+    }
+
+    let map;
+    function initMap() {
+      const mapContainer = document.getElementById('interactiveMap');
+      if (!mapContainer) return;
+
+      // WKO Uralsk Center coordinates
+      map = L.map('interactiveMap').setView([51.23, 51.37], 7);
+
+      // Using Esri World Topo Map (Reliable, no 403 access blocking issue)
+      const esriLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), swisstopo, MapmyIndia, &copy; OpenStreetMap contributors'
+      });
+
+      esriLayer.addTo(map);
+
+      // WKO Tourist Pins
+      const locations = [
+        { name: "Орал қаласы (Орталық)", lat: 51.23, lng: 51.37, desc: "XIX ғ. Сәулеті & Еуропа-Азия шекарасы" },
+        { name: "Қазталов (Жалпақтал)", lat: 49.68, lng: 49.38, desc: "30м Ынтымақ мұнарасы" },
+        { name: "Теректі (Шалқар көлі)", lat: 51.02, lng: 51.85, desc: "Шалқар емдік көлі" },
+        { name: "Бөкей ордасы (Хан ордасы)", lat: 48.77, lng: 47.43, desc: "Хан ордасы тарихи кешені" },
+        { name: "Ақжайық (Чапаев)", lat: 50.20, lng: 51.45, desc: "Жайық өзені & Су туризмі" },
+        { name: "Жаңақала", lat: 49.22, lng: 50.36, desc: "Күйшілер өлкесі & Самар көлдері" },
+        { name: "Бөрлі (Ақсай)", lat: 51.17, lng: 52.99, desc: "Индустриалды эко-маршруттар" },
+        { name: "Шыңғырлау", lat: 51.09, lng: 54.08, desc: "Сарқырама табиғи бұлағы" },
+        { name: "Сырым (Жымпиты)", lat: 50.25, lng: 52.59, desc: "Алашорда тарихи музейі" },
+        { name: "Тасқала", lat: 51.11, lng: 50.36, desc: "Ешкітау табиғи жоталары" },
+        { name: "Бәйтерек (Мичурин)", lat: 51.28, lng: 51.42, desc: "Жасыл агротуризм & Самал бақтары" },
+        { name: "Қаратөбе", lat: 49.68, lng: 53.52, desc: "Мұхит әндері өлкесі & Қаратөбе құмдары" },
+        { name: "Жәнібек", lat: 49.42, lng: 46.85, desc: "Батыс шекаралық тарихи бекініс" }
+      ];
+
+      locations.forEach(loc => {
+        L.marker([loc.lat, loc.lng]).addTo(map)
+          .bindPopup(`<b>${loc.name}</b><br>${loc.desc}`);
+      });
+    }
+
+    function switchMapMode(mode) {
+      const leafletMap = document.getElementById('interactiveMap');
+      const googleMap = document.getElementById('googleMapIframe');
+      const btnInteractive = document.getElementById('btnMapViewInteractive');
+      const btnGoogle = document.getElementById('btnMapViewGoogle');
+
+      if (!leafletMap || !googleMap) return;
+
+      if(mode === 'google') {
+        leafletMap.style.display = 'none';
+        googleMap.style.display = 'block';
+        if(btnGoogle) { btnGoogle.style.background = 'var(--primary)'; btnGoogle.style.color = '#fff'; }
+        if(btnInteractive) { btnInteractive.style.background = '#e1e8ed'; btnInteractive.style.color = 'var(--text-dark)'; }
+      } else {
+        googleMap.style.display = 'none';
+        leafletMap.style.display = 'block';
+        if(btnInteractive) { btnInteractive.style.background = 'var(--primary)'; btnInteractive.style.color = '#fff'; }
+        if(btnGoogle) { btnGoogle.style.background = '#e1e8ed'; btnGoogle.style.color = 'var(--text-dark)'; }
+        if(map) setTimeout(() => { map.invalidateSize(); }, 200);
+      }
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('navMenu');
+      if (menu) menu.classList.toggle('active');
+    }
+
+    function calculateTour() {
+      const routeSelect = document.getElementById('routeSelect');
+      const peopleCount = document.getElementById('peopleCount');
+      const carType = document.getElementById('carType');
+
+      if (!routeSelect || !peopleCount || !carType) return;
+
+      const route = routeSelect.value;
+      const people = parseInt(peopleCount.value) || 1;
+      const car = carType.value;
+
+      let distance = 640;
+      let time = "4 сағ 30 мин";
+
+      if(route === 'jalpaktal') { distance = 640; time = "4 сағ 30 мин"; }
+      else if(route === 'shalkar') { distance = 220; time = "1 сағ 40 мин"; }
+      else if(route === 'bokei') { distance = 1100; time = "7 сағ 00 мин"; }
+      else if(route === 'shingirlau') { distance = 440; time = "3 сағ 20 мин"; }
+      else if(route === 'tasqala') { distance = 180; time = "1 сағ 20 мин"; }
+      else if(route === 'circle') { distance = 1450; time = "3 күн Экспедиция"; }
+
+      const fuelConsumption = (car === 'sedan') ? 0.09 : 0.14;
+      const fuelCost = Math.round(distance * fuelConsumption * 260);
+      const foodAndStay = (route === 'circle') ? (people * 25000) : (people * 6000);
+      const total = fuelCost + foodAndStay;
+      const perPerson = Math.round(total / people);
+
+      const elDist = document.getElementById('resDistance');
+      const elTime = document.getElementById('resTime');
+      const elFuel = document.getElementById('resFuel');
+      const elFood = document.getElementById('resFood');
+      const elPerP = document.getElementById('resPerPerson');
+
+      if (elDist) elDist.innerText = distance + " км (барып-қайту)";
+      if (elTime) elTime.innerText = time;
+      if (elFuel) elFuel.innerText = fuelCost.toLocaleString() + " ₸";
+      if (elFood) elFood.innerText = foodAndStay.toLocaleString() + " ₸";
+      if (elPerP) elPerP.innerText = perPerson.toLocaleString() + " ₸";
+    }
+
+    function printItinerary() {
+      window.print();
+    }
+
+    function playAudio(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'kk-KZ';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Аудио: " + text);
+      }
+    }
+
+    const quizData = [
+      {
+        question: "30 метрлік «Ынтымақ» мұнарасы БҚО-ның қай ауданында орналасқан?",
+        options: ["Қазталов ауданы (Жалпақтал)", "Теректі ауданы", "Сырым ауданы", "Бөрлі ауданы"],
+        correct: 0
+      },
+      {
+        question: "«Даланың тұзды інжу-маржаны» атанып кеткен емдік көл қандай?",
+        options: ["Алакөл", "Шалқар көлі", "Балқаш", "Зайсан"],
+        correct: 1
+      },
+      {
+        question: "Батыс Алашорда үкіметінің тарихи орталығы болған ауыл қайсысы?",
+        options: ["Чапаев", "Жымпиты", "Жәнібек", "Қаратөбе"],
+        correct: 1
+      },
+      {
+        question: "Әлемдегі ең кішкентай табиғи сарқырама БҚО-ның қай ауданында?",
+        options: ["Шыңғырлау ауданы", "Тасқала ауданы", "Бәйтерек ауданы", "Ақжайық ауданы"],
+        correct: 0
+      },
+      {
+        question: "Тұңғыш қазақ баспаханасы мен мектебі ашылған тарихи мекен:",
+        options: ["Орал қаласы", "Хан ордасы (Бөкей ордасы)", "Жалпақтал", "Ақсай"],
+        correct: 1
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function loadQuizQuestion() {
+      const q = quizData[currentQ];
+      const qEl = document.getElementById('quizQuestion');
+      const optsContainer = document.getElementById('quizOptions');
+
+      if (!qEl || !optsContainer) return;
+
+      qEl.innerText = `Сұрақ ${currentQ + 1}/5: ${q.question}`;
+      optsContainer.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(idx, btn);
+        optsContainer.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedIdx, btnElement) {
+      const q = quizData[currentQ];
+      const buttons = document.querySelectorAll('.quiz-btn');
+      buttons.forEach(b => b.disabled = true);
+
+      if(selectedIdx === q.correct) {
+        btnElement.classList.add('correct');
+        score++;
+      } else {
+        btnElement.classList.add('wrong');
+        buttons[q.correct].classList.add('correct');
+      }
+
+      const scoreEl = document.getElementById('quizScore');
+      if (scoreEl) scoreEl.innerText = `Ұпай: ${score} / 5`;
+    }
+
+    function nextQuestion() {
+      if(currentQ < quizData.length - 1) {
+        currentQ++;
+        loadQuizQuestion();
+      } else {
+        alert(`Викторина аяқталды! Сіздің нәтижеңіз: ${score} / 5`);
+        currentQ = 0;
+        score = 0;
+        const scoreEl = document.getElementById('quizScore');
+        if (scoreEl) scoreEl.innerText = `Ұпай: 0 / 5`;
+        loadQuizQuestion();
+      }
+    }
+
+    function openDocModal(type) {
+      const modal = document.getElementById('docModal');
+      const title = document.getElementById('modalTitle');
+      const body = document.getElementById('modalBody');
+
+      if (!modal || !title || !body) return;
+
+      if(type === 'program') {
+        title.innerText = "34 сағаттық «AQJAIYQ GEO-BRANDING» Авторлық Бағдарламасы";
+        body.innerHTML = `
+          <h4>1. ТҮСІНДІРМЕ ЖАЗБА</h4>
+          <p>Бағдарлама БҚО-ның 12 ауданы мен Орал қаласының тарихи-географиялық брендтерін цифрлық ГАЖ технологиялар арқылы оқытуға бағытталған.</p>
+          <br>
+          <h4>2. КҮНТІЗБЕЛІК-ТАҚЫРЫПТЫҚ ЖОСПАР (4 Модуль)</h4>
+          <ul>
+            <li><strong>1 Модуль:</strong> Орал қаласы мен Еуропа-Азия шекара географиясы (8 сағат)</li>
+            <li><strong>2 Модуль:</strong> Нарын құмдары мен Хан ордасы этнографиясы (8 сағат)</li>
+            <li><strong>3 Модуль:</strong> Шалқар, Жайық және Шыңғырлау сарқырамасы гидрологиясы (10 сағат)</li>
+            <li><strong>4 Модуль:</strong> Smart Tour Constructor & Geo-Box жасау практикасы (8 сағат)</li>
+          </ul>
+        `;
+      } else if(type === 'reviews') {
+        title.innerText = "Ресми Рецензиялар Топтамасы (2026)";
+        body.innerHTML = `
+          <p><strong>1. Ғылыми рецензия:</strong> География ғылымдарының кандидаты, PhD доценті тарапынан берілген. Бағдарламаның ғылыми-аймақтық дәлдігі жоғары бағаланған.</p><br>
+          <p><strong>2. Әдістемелік рецензия:</strong> БҚО Өрлеу БАҰО әдіскерінің сараптамалық қорытындысы. Жаңа №130 бұйрық стандартына толық сәйкес.</p><br>
+          <p><strong>3. Практик мұғалім рецензиясы:</strong> Жоғары санатты география пәні мұғалімінің пікірі. Оқушылардың өлкетануға қызығушылығын арттырудағы тиімділігі дәлелденген.</p>
+        `;
+      } else if(type === 'kmj') {
+        title.innerText = "№130 Бұйрыққа сай ҚМЖ мен Worksheet Үлгілері";
+        body.innerHTML = `
+          <h4>ҚЫСҚА МЕРЗІМДІ САБАҚ ЖОСПАРЫ (ҚМЖ) - 13-сабақ</h4>
+          <p><strong>Сабақ тақырыбы:</strong> Қазталов ауданы Жалпақтал «Ынтымақ» мұнарасы және 3D модельдеу.</p>
+          <p><strong>Оқу мақсаты:</strong> 8.2.1.4 - Жергілікті брендтерді цифрлық картада визуализациялау.</p>
+          <p><strong>Сабақ барысы:</strong> Оқушылар Smart Constructor арқылы Орал-Жалпақтал маршрутын есептейді және Geo-Box құрамындағы үлгілерді талдайды.</p>
+        `;
+      } else if(type === 'rubric') {
+        title.innerText = "Критериалды Бағалау Рубрикаторы мен Дескрипторлар";
+        body.innerHTML = `
+          <table border="1" style="width:100%; border-collapse:collapse; padding:8px;" cellpadding="6">
+            <tr style="background:#f0f4f8;">
+              <th>Критерий</th>
+              <th>Төмен (1-3)</th>
+              <th>Орташа (4-7)</th>
+              <th>Жоғары (8-10)</th>
+            </tr>
+            <tr>
+              <td>12 Аудан брендингін білу</td>
+              <td>Тек 2-3 ауданды біледі</td>
+              <td>6-8 ауданды біледі</td>
+              <td>Барлық 12 аудан брендын еркін сипаттайды</td>
+            </tr>
+            <tr>
+              <td>ГАЖ-Картамен жұмыс</td>
+              <td>Картаны аша алмайды</td>
+              <td>Маркерлерді табады</td>
+              <td>Маршрут пен GPS есебін жасайды</td>
+            </tr>
+          </table>
+        `;
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeDocModal() {
+      const modal = document.getElementById('docModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function loadLocalVideo(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const videoPlayer = document.getElementById('localVideoPlayer');
+        if (videoPlayer) {
+          videoPlayer.src = URL.createObjectURL(file);
+          videoPlayer.play();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
